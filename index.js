@@ -12,18 +12,25 @@ client.on('message', async message => {
         const embed = new Discord.MessageEmbed();
 
         if(message.attachments.size) {
+            const pinMessageArr = message.content.split(' ');
+            pinMessageArr.shift();
+            
+            const pinMessage = pinMessageArr.join(' ');
+
             embed.setAuthor(message.author.username);
+            embed.setDescription(pinMessage);
             message.attachments.each(msg => {
                 embed.setImage(msg.attachment);
             });
-
-            pinchannel.send(embed);
+            
+            const timestamp = new Date(message.createdTimestamp);
+            pinchannel.send(`Pinned @ ${timestamp}\nPinned by: ${message.author}`, embed);
         } else {
             console.log('poop');
         }
 
         // pinchannel.send('It works');
     }
-})
+});
 
 client.login(process.env.TOKEN);
